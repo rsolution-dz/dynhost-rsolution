@@ -1,8 +1,13 @@
 #/bin/sh
+#########################################################################
+# A simple (cron) script to update DynHost on OVH hosting 
+# https://github.com/rezgui/dynhost-ovh (Yacine REZGUI) 
+# forked from https://github.com/yjajkiew/dynhost-ovh (Yann Jajkiewicz) 
+#########################################################################
 
 #
 # CONFIG
-#
+##################################
 
 HOST='YOUR_DOMAINE_NAME'
 LOGIN='YOUR_LOGIN'
@@ -13,17 +18,20 @@ CURRENT_DATE=`date`
 
 #
 # GET IPs
-#
+##################################
 
 HOST_IP=`dig +short $HOST`
 CURRENT_IP=`curl -4 ifconfig.me/ip`
 
 #
 # DO THE WORK
-#
+##################################
+
+echo "------------------------------------------------------------------------------------------" >> $PATH_LOG
+
 if [ -z $CURRENT_IP ] || [ -z $HOST_IP ]
 then
-        echo "No IP retrieved" >> $PATH_LOG
+        echo "$CURRENT_DATE : No IP retrieved" >> $PATH_LOG
 else
         if [ "$HOST_IP" != "$CURRENT_IP" ]
         then
