@@ -22,3 +22,7 @@ sudo apt-get install curl dnsutils
 2. The command curl (with the website ifconfig.me/ip) is used to retrieve the current public IP address of your machine.
 3. The two IPs are compared and if necessary a curl command to OVH is used to update your DynHost with your current public IP address.
 
+# Project
+project forked and modified from https://github.com/yjajkiew/dynhost-ovh (Yann Jajkiewicz)
+
+
