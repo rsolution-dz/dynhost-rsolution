@@ -16,7 +16,7 @@ CURRENT_DATE=`date`
 #
 
 HOST_IP=`dig +short $HOST`
-CURRENT_IP=`curl -4 ifconfig.co`
+CURRENT_IP=`curl -4 ifconfig.me/ip`
 
 #
 # DO THE WORK
