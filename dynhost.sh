@@ -1,7 +1,7 @@
 #/bin/sh
 #########################################################################
-# A simple (cron) script to update DynHost on OVH hosting 
-# https://github.com/rezgui/dynhost-ovh (Yacine REZGUI) 
+# A simple (cron) script to update DynHost on RSolution Hosting 
+# https://github.com/rezgui/dynhost-rsolution (Yacine REZGUI) 
 # forked from https://github.com/yjajkiew/dynhost-ovh (Yann Jajkiewicz) 
 #########################################################################
 
@@ -9,19 +9,24 @@
 # CONFIG
 ##################################
 
-HOST='YOUR_DOMAINE_NAME'
-LOGIN='YOUR_LOGIN'
-PASSWORD='YOUR_PASSWORD'
+DNS='ns1.rsolution.dz'
+HOST='oracle.rsolution.dz'
+LOGIN='oracle'
+PASSWORD='Oracle_Lisa$$2023'
+DYNDNS='https://dnsadmin.rsolution.dz/dynamic_update.php?system=dyndns'
+OPTIONS='--silent'
+VERBOSE=0
+SHOWMSG=true
 
-PATH_LOG=/var/log/dynhost
+PATH_LOG=./dynhost.log
 CURRENT_DATE=`date`
 
 #
 # GET IPs
 ##################################
 
-HOST_IP=`dig +short $HOST`
-CURRENT_IP=`curl -4 ifconfig.me/ip`
+HOST_IP=`dig +short $HOST @$DNS`
+CURRENT_IP=`curl -4 ifconfig.me/ip $OPTIONS`
 
 #
 # DO THE WORK
@@ -35,12 +40,33 @@ then
 else
         if [ "$HOST_IP" != "$CURRENT_IP" ]
         then
-                echo "$CURRENT_DATE"": Current IP:" "$CURRENT_IP" "and" "host IP:" "$HOST_IP" "   IP has changed!" >> $PATH_LOG
-                RES=`curl --user "$LOGIN:$PASSWORD" "https://www.ovh.com/nic/update?system=dyndns&hostname=$HOST&myip=$CURRENT_IP"`
+                RES=`curl $DYNDNS&hostname=$HOST&myip=$CURRENT_IP&verbose=$VERBOSE --user $LOGIN:$PASSWORD $OPTIONS`
+
+                echo "$CURRENT_DATE" >> $PATH_LOG
+                echo "IP has changed!" >> $PATH_LOG
+				echo "Current IP: $CURRENT_IP --> New IP: $HOST_IP" >> $PATH_LOG
                 echo "Result request dynHost:" >> $PATH_LOG
                 echo "$RES" >> $PATH_LOG
+
+                if [ "$SHOWMSG" == true]
+				then
+	                echo "$CURRENT_DATE" 
+    	            echo "IP has changed!" 
+					echo "Current IP: $CURRENT_IP --> New IP: $HOST_IP" 
+                	echo "Result request dynHost:" 
+                	echo "$RES"
+				fi
+
         else
-                echo "$CURRENT_DATE"": Current IP:" "$CURRENT_IP" "and" "Host IP:" "$HOST_IP" "   IP has not changed" >> $PATH_LOG
+                echo "$CURRENT_DATE" >> $PATH_LOG
+                echo "IP has not changed" >> $PATH_LOG
+				echo "Unchanged IP: $CURRENT_IP" >> $PATH_LOG
+
+                if [ "$SHOWMSG" == true ]
+				then
+                	echo "$CURRENT_DATE" 
+                	echo "IP has not changed" 
+					echo "Unchanged IP: $CURRENT_IP"
+				fi
         fi
 fi
-
