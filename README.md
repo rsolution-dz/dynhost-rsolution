@@ -1,4 +1,4 @@
-# dynhost-ovh
+# dynhost-rsolution
 A simple (cron) script to update DynHost on RSolution Hosting
 
 # Prerequisites
