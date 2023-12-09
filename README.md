@@ -1,5 +1,5 @@
 # dynhost-ovh
-A simple (cron) script to update DynHost on OVH hosting
+A simple (cron) script to update DynHost on RSolution Hosting
 
 # Prerequisites
 This script works with two linux commands : curl and dig.
